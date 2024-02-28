@@ -73,4 +73,34 @@ class TopController extends Controller
              'post',
          ));
      }
+
+
+
+      /**
+     * カテゴリーごとの記事
+     *
+     * @param int $category_id カテゴリーID
+     * @return Response src/resources/views/article/category.blade.php
+     */
+    public function articleCategory($category_id)
+    {
+        // ユーザーがログイン済み
+        if (Auth::check()) {
+            // 認証しているユーザーを取得
+            $user = Auth::user();
+            // 認証しているユーザーIDを取得
+            $user_id = $user->id;
+        } else {
+            $user_id = null;
+        }
+        // カテゴリーを全て取得
+        $categories = $this->category->getAllCategories();
+        // カテゴリーIDをもとにカテゴリーごとの記事を取得
+        $posts = $this->post->getPostByCategoryId($category_id);
+        return view('article.category', compact(
+            'user_id',
+            'categories',
+            'posts',
+        ));
+    }
 }

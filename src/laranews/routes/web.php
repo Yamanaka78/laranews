@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TopController;
-use App\Http\Controllers\User\PostController; // 追加
+use App\Http\Controllers\User\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,18 +24,26 @@ require __DIR__.'/auth.php';
 Route::get('/', [TopController::class, 'top'])
     ->name('top');
 
-//総合トップ記事詳細画面
-Route::get('/article/{post_id}', [TopController::class, 'articleShow'])->name('top.article.show');
+// 総合トップ記事詳細画面
+Route::get('/article/{post_id}', [TopController::class, 'articleShow'])
+    ->name('top.article.show');
 
-// マイページ
+// 総合トップカテゴリーごとの記事一覧
+Route::get('/article/category/{category_id}', [TopController::class, 'articleCategory'])
+    ->name('top.article.category');
+
+// マイページトップ・投稿
 Route::get('/user/{id}/index', [PostController::class, 'index'])
     ->name('user.index');
 
-//投稿ページ
-Route::get('post/create', [PostController::class, 'create'])->name('post.create');
+// 投稿登録画面
+Route::get('/post/create', [PostController::class, 'create'])
+    ->name('post.create');
 
-//投稿登録処理
-Route::post('post/store', [PostController::class, 'store'])->name('post.store');
+// 投稿登録処理
+Route::post('/post/store', [PostController::class, 'store'])
+    ->name('post.store');
 
-//投稿詳細
-Route::get('post/show/{post_id}', [PostController::class, 'show'])->name('post.show');
+// 投稿詳細
+Route::get('/post/show/{post_id}', [PostController::class, 'show'])
+    ->name('post.show');

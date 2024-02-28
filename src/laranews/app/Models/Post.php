@@ -67,6 +67,7 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+
     /**
      * ユーザーIDに紐づいた投稿リストを全て取得する
      *
@@ -76,6 +77,17 @@ class Post extends Model
     public function getAllPostsByUserId($user_id)
     {
         $result = $this->where('user_id', $user_id)->with('category')->get();
+        return $result;
+    }
+/**
+     * カテゴリーごとの記事を全て取得
+     *
+     * @param int $category_id カテゴリーID
+     */
+    public function getPostByCategoryId($category_id)
+    {
+        $result = $this->where('category_id', $category_id)
+                       ->get();
         return $result;
     }
 
