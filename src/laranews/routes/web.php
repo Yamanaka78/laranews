@@ -33,3 +33,6 @@ Route::get('post/create', [PostController::class, 'create'])->name('post.create'
 
 //投稿登録処理
 Route::post('post/store', [PostController::class, 'store'])->name('post.store');
+
+//投稿詳細
+Route::get('post/show/{post_id}', [PostController::class, 'show'])->name('post.show');

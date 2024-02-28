@@ -62,7 +62,7 @@ class Post extends Model
      * リクエストされたデータをpostsテーブルにinsertする
      *
      * @param int $user_id ログインユーザーID
-     * @param array $request リクエストデータ
+     * @param  $request リクエストデータ
      * @return object $result App\Models\Post
      */
     public function insertPostToSaveDraft($user_id, $request)
@@ -76,7 +76,6 @@ class Post extends Model
             'view_counter'     => 0,
             'favorite_counter' => 0,
             'delete_flg'       => 0,
-　　　　　　　// created_atやupdated_atはmDB登録時に自動的に今日の日時で登録されるので、記載しない
         ]);
         return $result;
     }
@@ -100,7 +99,6 @@ class Post extends Model
             'view_counter'     => 0,
             'favorite_counter' => 0,
             'delete_flg'       => 0,
-　　　　　　　// created_atやupdated_atはmDB登録時に自動的に今日の日時で登録されるので、記載しない
         ]);
         return $result;
     }
@@ -127,4 +125,16 @@ class Post extends Model
         ]);
         return $result;
     }
-}
+
+    /**
+     * 投稿IDをもとにpostsテーブルから一意の投稿データを取得
+     * @param int $post_id 投稿ID
+     * @return object $result App\Models\Post
+     */
+
+     public function feachPostDateByPostId($post_id)
+     {
+        $result = $this->find($post_id);
+        return $result;
+     }
+    }
