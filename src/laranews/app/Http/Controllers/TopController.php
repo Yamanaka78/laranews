@@ -6,36 +6,32 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // 追加
 use App\Models\Category;
 use App\Models\Post;
+use App\Services\UserService;
 
 class TopController extends Controller
 {
 
     private $post;
     private $category;
-
+    private $userService;
 
     public function __construct()
     {
         $this->category = new Category();
         $this->post     = new Post();
+        $this->userService = new UserService();
     }
     /**
      * 総合トップ画面
      */
     public function top()
     {
-        // ユーザーがログイン済み
-        if (Auth::check()) {
-            // 認証しているユーザーを取得
-            $user = Auth::user();
-            // 認証しているユーザーIDを取得
-            $user_id = $user->id;
-        } else {
-            $user_id = null;
-        }
+        // ログイン時、認証しているユーザーIDを取得し、ログインしていない場合はnullを返す
+        $user_id = $this->userService->loginUserId();
 
         //カテゴリーを全て取得
         $categories = $this->category->getAllCategories();
+
         //全ての投稿データを取得(publish_flgが公開のみ、最新更新日時をソート)
         $posts = $this->post->getPostsSortByLatestUpdate();
         return view('top', compact(
@@ -53,15 +49,8 @@ class TopController extends Controller
 
      public function articleShow($post_id)
      {
-         // ユーザーがログイン済み
-         if (Auth::check()) {
-             // 認証しているユーザーを取得
-             $user = Auth::user();
-             // 認証しているユーザーIDを取得
-             $user_id = $user->id;
-         } else {
-             $user_id = null;
-         }
+         // ログイン時、認証しているユーザーIDを取得し、ログインしていない場合はnullを返す
+        $user_id = $this->userService->loginUserId();
 
          // カテゴリーを全て取得
          $categories = $this->category->getAllCategories();
@@ -84,15 +73,9 @@ class TopController extends Controller
      */
     public function articleCategory($category_id)
     {
-        // ユーザーがログイン済み
-        if (Auth::check()) {
-            // 認証しているユーザーを取得
-            $user = Auth::user();
-            // 認証しているユーザーIDを取得
-            $user_id = $user->id;
-        } else {
-            $user_id = null;
-        }
+        // ログイン時、認証しているユーザーIDを取得し、ログインしていない場合はnullを返す
+        $user_id = $this->userService->loginUserId();
+
         // カテゴリーを全て取得
         $categories = $this->category->getAllCategories();
         // カテゴリーIDをもとにカテゴリーごとの記事を取得
