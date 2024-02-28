@@ -12,7 +12,7 @@
 @else
 @endif
 {{-- formアクションは、この後updateアクションを追加する際に設定するので今は空欄でOK --}}
-<form action="" method="POST" class="p-5">
+<form action="{{ route('post.update', ['post_id' => $post->id]) }}" method="POST" class="p-5">
 @csrf
     @if ($errors->any())
         <div class="flex shadow-lg rounded-sm">
