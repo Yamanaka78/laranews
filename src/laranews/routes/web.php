@@ -24,6 +24,9 @@ require __DIR__.'/auth.php';
 Route::get('/', [TopController::class, 'top'])
     ->name('top');
 
+//総合トップ記事詳細画面
+Route::get('/article/{post_id}', [TopController::class, 'articleShow'])->name('top.article.show');
+
 // マイページ
 Route::get('/user/{id}/index', [PostController::class, 'index'])
     ->name('user.index');
