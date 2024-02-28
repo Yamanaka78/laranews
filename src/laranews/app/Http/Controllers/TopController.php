@@ -4,9 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // 追加
+use App\Models\Category;
+use App\Models\Post;
 
 class TopController extends Controller
 {
+
+    private $post;
+    private $category;
+
+
+    public function __construct()
+    {
+        $this->category = new Category();
+        $this->post     = new Post();
+    }
     /**
      * 総合トップ画面
      */
@@ -22,6 +34,14 @@ class TopController extends Controller
             $user_id = null;
         }
 
-        return view('top', compact('user_id'));
+        //カテゴリーを全て取得
+        $categories = $this->category->getAllCategories();
+        //全ての投稿データを取得(publish_flgが公開のみ、最新更新日時をソート)
+        $posts = $this->post->getPostsSortByLatestUpdate();
+        return view('top', compact(
+            'user_id',
+            'categories',
+            'posts',
+        ));
     }
 }

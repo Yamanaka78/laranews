@@ -38,6 +38,28 @@ class Post extends Model
     ];
 
     /**
+     * Userモデルとリレーション
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * 投稿データを全て取得し、最新更新日時順にソート。総合トップ画面に表示する記事はステータス「公開」(publish_flg=1)のみ
+     */
+    public function getPostsSortByLatestUpdate()
+    {
+        $result = $this->where('publish_flg', 1)
+                       ->orderBy('updated_at', 'DESC')
+                       ->with('user')
+                       ->with('category')
+                       ->get();
+        return $result;
+    }
+
+
+    /**
      * Categoryモデルとリレーション
      */
     public function category()
