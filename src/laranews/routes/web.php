@@ -66,6 +66,10 @@ Route::controller(PostController::class)->group(function() {
 
     //公開中記事一覧
     Route::get('/post/release', 'release')->name('post.release');
+
+     // 予約公開記事一覧
+    Route::get('/post/reservationRelease', 'reservationRelease')
+    ->name('post.reservationRelease');
 });
 
 // ゴミ箱関係
