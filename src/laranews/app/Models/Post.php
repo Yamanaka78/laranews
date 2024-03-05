@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Carbon;
 
@@ -54,23 +55,37 @@ class Post extends Model
     }
 
     /**
-     * 投稿データを全て取得し、最新更新日時順にソート。総合トップ画面に表示する記事はステータス「公開」(publish_flg=1)のみ
+     * 投稿データを全て取得し、最新更新日時順にソート
      */
     public function getPostsSortByLatestUpdate()
     {
         $result = $this->where([
-            ['publish_flg', 1],
-            ['delete_flg', 0],
-        ])
-        ->orderBy('updated_at', 'DESC')
-        ->with('user')
-        ->with('category')
-        ->get();
-
+                            ['publish_flg', 1],
+                            ['delete_flg', 0],
+                        ])
+                       ->orderBy('updated_at', 'DESC')
+                       ->with('user')
+                       ->with('category')
+                       ->get();
         return $result;
     }
 
-     /**
+    /**
+     * カテゴリーごとの記事を全て取得
+     *
+     * @param int $category_id カテゴリーID
+     */
+    public function getPostByCategoryId($category_id)
+    {
+        $result = $this->where([
+                            ['category_id', $category_id],
+                            ['delete_flg', 0],
+                        ])
+                       ->get();
+        return $result;
+    }
+
+    /**
      * ユーザーIDに紐づいた投稿リストを全て取得する
      *
      * @param int $user_id ユーザーID
@@ -79,27 +94,12 @@ class Post extends Model
     public function getAllPostsByUserId($user_id)
     {
         $result = $this->where([
-            ['user_id', $user_id],
-            ['delete_flg', 0],
-        ])
-        ->with('category')
-        ->orderBy('updated_at', 'DESC')
-        ->get();
-        return $result;
-    }
-
-
-/**
-     * カテゴリーごとの記事を全て取得
-     *
-     * @param int $category_id カテゴリーID
-     */
-    public function getPostByCategoryId($category_id)
-    {
-        $result = $this->where([
-            ['category_id', $category_id],
-            ['delete_flg', 0],
-            ])->get();
+                            ['user_id', $user_id],
+                            ['delete_flg', 0],
+                        ])
+                       ->with('category')
+                       ->orderBy('updated_at', 'DESC')
+                       ->get();
         return $result;
     }
 
@@ -108,7 +108,7 @@ class Post extends Model
      * リクエストされたデータをpostsテーブルにinsertする
      *
      * @param int $user_id ログインユーザーID
-     * @param  $request リクエストデータ
+     * @param array $request リクエストデータ
      * @return object $result App\Models\Post
      */
     public function insertPostToSaveDraft($user_id, $request)
@@ -174,17 +174,17 @@ class Post extends Model
 
     /**
      * 投稿IDをもとにpostsテーブルから一意の投稿データを取得
+     *
      * @param int $post_id 投稿ID
      * @return object $result App\Models\Post
      */
-
-     public function feachPostDateByPostId($post_id)
-     {
+    public function feachPostDateByPostId($post_id)
+    {
         $result = $this->find($post_id);
         return $result;
-     }
+    }
 
-     /**
+    /**
      * 記事の更新処理
      * 下書き保存=>publish_flg=0
      * リクエストされたデータをもとにpostデータを更新する
@@ -256,18 +256,18 @@ class Post extends Model
      * @param int $user_id ユーザーID
      * @return object $result App\Models\Post
      */
-
-     public function getTrashPostLists($user_id)
-     {
+    public function getTrashPostLists($user_id)
+    {
         $result = $this->where([
-            ['user_id', $user_id],
-            ['delete_flg', 1],
-        ])->get();
+                            ['user_id', $user_id],
+                            ['delete_flg', 1],
+                        ])
+                        ->get();
 
         return $result;
-     }
+    }
 
-         /**
+    /**
      * 記事の論理削除(ゴミ箱に移動)
      *
      * @param array $post 投稿データ
@@ -282,7 +282,6 @@ class Post extends Model
         $result->save();
         return $result;
     }
-
 
     /**
      * 記事の復元
@@ -300,7 +299,6 @@ class Post extends Model
         return $result;
     }
 
-
     /**
      * 記事の削除
      *
@@ -313,7 +311,7 @@ class Post extends Model
         return $result;
     }
 
-     /**
+    /**
      * 下書き保存の記事一覧を取得
      *
      * @param int $user_id ログイン中のユーザーID
@@ -324,6 +322,24 @@ class Post extends Model
         $result = $this->where([
                             ['user_id', $user_id],
                             ['publish_flg', 0],
+                            ['delete_flg', 0]
+                        ])
+                        ->orderBy('updated_at', 'DESC')
+                        ->get();
+        return $result;
+    }
+
+    /**
+     * 公開中の記事一覧を取得
+     *
+     * @param int $user_id ログイン中のユーザーID
+     * @return object $result App\Models\Post
+     */
+    public function getReleasePosts($user_id)
+    {
+        $result = $this->where([
+                            ['user_id', $user_id],
+                            ['publish_flg', 1],
                             ['delete_flg', 0]
                         ])
                         ->orderBy('updated_at', 'DESC')

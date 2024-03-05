@@ -169,4 +169,24 @@ class PostController extends Controller
             'saveDrafts',
         ));
     }
+
+    /**
+     * 公開中記事一覧
+     *
+     * @return Response src/resources/views/user/list/release.blade.phpを表示
+     */
+    public function release()
+    {
+        // ログインしているユーザー情報を取得
+        $user = Auth::user();
+        // ログインユーザー情報からユーザーIDを取得
+        $user_id = $user->id;
+        // 公開中の記事一覧を取得
+        $releases = $this->post->getReleasePosts($user_id);
+        return view('user.list.release', compact(
+            'releases',
+        ));
+    }
+
+
 }

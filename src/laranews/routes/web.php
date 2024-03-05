@@ -63,6 +63,9 @@ Route::controller(PostController::class)->group(function() {
     // 下書き保存一覧
     Route::get('/post/saveDraft', 'saveDraft')
         ->name('post.saveDraft');
+
+    //公開中記事一覧
+    Route::get('/post/release', 'release')->name('post.release');
 });
 
 // ゴミ箱関係
