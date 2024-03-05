@@ -28,7 +28,6 @@ class TopController extends Controller
     {
         // ログイン時、認証しているユーザーIDを取得し、ログインしていない場合はnullを返す
         $user_id = $this->userService->loginUserId();
-
         //カテゴリーを全て取得
         $categories = $this->category->getAllCategories();
 
