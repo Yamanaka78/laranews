@@ -60,6 +60,9 @@ Route::controller(PostController::class)->group(function() {
     Route::post('/post/edit/{post_id}', 'update')
         ->name('post.update');
 
+    // 下書き保存一覧
+    Route::get('/post/saveDraft', 'saveDraft')
+        ->name('post.saveDraft');
 });
 
 // ゴミ箱関係

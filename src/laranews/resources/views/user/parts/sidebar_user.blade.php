@@ -4,7 +4,7 @@
         <div class="pt-3 pl-3">こんにちは、<br>{{ Auth::user()->name }}さん</div>
         <div class="flex items-center justify-start pt-6 ml-8">
             <p class="font-bold text-xl">
-                Laranews
+                Laratto
             </p>
         </div>
         <nav class="mt-6">
@@ -50,7 +50,7 @@
             </div>
             <div>
                 <a class="flex items-center px-4 py-2 mt-2 text-gray-600 transition-colors duration-200 transform hover:bg-sky-500 hover:text-white"
-                href="#">
+                href="{{ route('post.saveDraft') }}">
                     <span class="text-left">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z" clip-rule="evenodd" />
@@ -110,9 +110,14 @@
                             <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
                         </svg>
                     </span>
-                    <span class="mx-2 text-md font-normal">
-                        ログアウト
-                    </span>
+                    <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                        <button>
+                            <span class="mx-2 text-md font-normal">
+                                ログアウト
+                            </span>
+                        </button>
+                    </form>
                 </a>
             </div>
         </nav>
