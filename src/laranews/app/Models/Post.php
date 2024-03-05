@@ -276,6 +276,7 @@ class Post extends Model
     public function moveTrashPostData($post)
     {
         $result = $post->fill([
+            'publish_flg' => 0,
             'delete_flg' => 1
         ]);
         $result->save();
@@ -292,9 +293,23 @@ class Post extends Model
     public function restorePostData($post)
     {
         $result = $post->fill([
+            'publish_flg' => 0,
             'delete_flg' => 0
         ]);
         $result->save();
+        return $result;
+    }
+
+
+    /**
+     * 記事の削除
+     *
+     * @param array $post 投稿データ
+     * @return object $result App\Models\Post
+     */
+    public function deletePostData($post)
+    {
+        $result = $post->delete();
         return $result;
     }
 }
