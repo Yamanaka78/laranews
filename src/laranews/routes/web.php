@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TopController;
 use App\Http\Controllers\User\PostController;
 use App\Http\Controllers\User\TrashController;
-
+use App\Http\Controllers\User\ReservationPostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -89,4 +89,12 @@ Route::controller(TrashController::class)->group(function() {
     // 記事を完全に削除
     Route::post('/post/delete/{post_id}', 'delete')
         ->name('post.delete');
+});
+
+
+// 予約公開
+Route::controller(ReservationPostController::class)->group(function() {
+    // 公開予約設定画面
+    Route::get('/reservation/post/setting', 'reservationSetting')
+        ->name('reservation.post');
 });
